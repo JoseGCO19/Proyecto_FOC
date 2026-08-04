@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Método Simplex Dual - Solucionador Paso a Paso</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <header>
+    <div class="logo-container">
+      <div class="logo-icon">SD</div>
+      <div>
+        <h1>Simplex Dual Solver</h1>
+        <div class="subtitle">Fundamentos para la Optimización Computacional (CAO801)</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- Panel Izquierdo: Configuración e Ingreso -->
+    <div class="card">
+      <div class="card-title">
+        <span>⚡ Ingreso del Problema</span>
+      </div>
+
+      <div class="form-group">
+        <label>Cargar Plantilla de Ejemplo:</label>
+        <select id="example-select" onchange="loadExample()">
+          <option value="">-- Seleccionar Ejemplo --</option>
+          <option value="estandar">Ejemplo Estándar (Factible Óptimo)</option>
+          <option value="infactible">Ejemplo Infactible (Dual No Acotado)</option>
+          <option value="tres_vars">Ejemplo con 3 Variables</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Problema de Programación Lineal (Texto Algebraico):</label>
+        <textarea id="lp-input" placeholder="MAX z = -3 x1 - 2 x2&#10;s.t.&#10;x1 + 2 x2 >= 6&#10;2 x1 + x2 >= 8&#10;x1, x2 >= 0"></textarea>
+      </div>
+
+      <div class="form-group" style="display: flex; gap: 1rem;">
+        <div style="flex: 1;">
+          <label>Modo Numérico:</label>
+          <select id="mode-select">
+            <option value="fraction">Fracciones Exactas (3/4)</option>
+            <option value="decimal">Decimales (0.75)</option>
+          </select>
+        </div>
+        <div style="flex: 1;">
+          <label>Regla de Pivote:</label>
+          <select id="pivot-select">
+            <option value="bland">Regla de Bland (Anti-ciclos)</option>
+            <option value="most_infeasible">Más Infactible (min b_i)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn" onclick="solveProblem()">🚀 Resolver Simplex Dual</button>
+      </div>
+    </div>
+
+    <!-- Panel Derecho: Visualizador de Iteraciones -->
+    <div>
+      <div id="results-card" class="card" style="display: none;">
+        <div class="card-title" style="justify-content: space-between;">
+          <span>📊 Visualización de Iteraciones</span>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn btn-secondary" onclick="exportMarkdown()" style="padding: 0.3rem 0.6rem; font-size: 0.8rem;">📥 Exportar Reporte (.md)</button>
+          </div>
+        </div>
+
+        <!-- Barra de Navegación de Pasos -->
+        <div class="step-nav">
+          <div class="step-indicator" id="step-indicator">Paso 1 de 1</div>
+          <div class="step-controls">
+            <button class="step-btn" id="btn-first" onclick="goToStep(0)">⏮ Primero</button>
+            <button class="step-btn" id="btn-prev" onclick="prevStep()">◀ Anterior</button>
+            <button class="step-btn" id="btn-next" onclick="nextStep()">Siguiente ▶</button>
+            <button class="step-btn" id="btn-last" onclick="goToStep(totalSteps - 1)">⏭ Último</button>
+          </div>
+        </div>
+
+        <!-- Rejilla con Diccionario y Tabla -->
+        <div class="viewer-grid">
+          <!-- Diccionario de Dantzig -->
+          <div>
+            <label style="font-weight: 600; color: var(--accent-cyan);">📗 Diccionario de Dantzig</label>
+            <div class="math-box" id="dictionary-box">
+              <!-- Ecuaciones renderizadas -->
+            </div>
+          </div>
+
+          <!-- Tabla Simplex Canónica -->
+          <div>
+            <label style="font-weight: 600; color: var(--accent-cyan);">📘 Tabla Simplex Canónica</label>
+            <div class="table-wrapper">
+              <table class="tableau" id="tableau-table">
+                <!-- Filas y Columnas -->
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Explicación del Criterio de Transición -->
+        <div class="explanation-box" id="explanation-box">
+          <div style="font-weight: 600; margin-bottom: 0.5rem;" id="exp-title">Análisis de la Iteración</div>
+          <div id="exp-content"></div>
+        </div>
+      </div>
+
+      <div id="placeholder-card" class="card" style="text-align: center; padding: 4rem 2rem;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">📐</div>
+        <h3 style="color: var(--text-muted);">Ingrese un problema o elija un ejemplo para comenzar</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">El solucionador mostrará paso a paso la variable que sale, la prueba del cociente dual para la variable que entra, y el diccionario resultante.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>

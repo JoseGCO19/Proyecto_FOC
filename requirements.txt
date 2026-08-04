@@ -1,0 +1,6 @@
+# Dependencias opcionales para la aplicación
+# Nota: El núcleo del algoritmo y el servidor web integrado funcionan con la biblioteca estándar de Python (0 dependencias requeridas).
+
+fastapi>=0.100.0
+uvicorn>=0.20.0
+rich>=13.0.0
