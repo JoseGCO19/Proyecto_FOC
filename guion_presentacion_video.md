@@ -18,21 +18,45 @@
 
 ### 1.1 Introducción (0:00 - 0:45)
 * **Qué mostrar en pantalla:** Diapositiva inicial con el título del proyecto y los nombres de los dos integrantes.
-* **Lo que debes decir:**
-  > "¡Hola a todos! En este video explicaremos nuestra implementación del **Método Simplex Dual** en Python. El programa permite resolver problemas de optimización leyendo los datos directamente desde archivos `.txt` y mostrando el proceso iterativo en consola."
+* **Lo que debes decir (Guión exacto):**
+  > "¡Hola a todos! En este video explicaremos nuestra implementación del **Método Simplex Dual** en Python. El programa permite resolver problemas de optimización leyendo los datos directamente desde archivos `.txt` y mostrando el proceso iterativo paso a paso en consola."
+
+---
 
 ### 1.2 Lógica Matemática del Simplex Dual (0:45 - 3:00)
-* **Qué mostrar en pantalla:** Diapositiva con las 2 fórmulas principales.
-* **Puntos a explicar:**
-  1. **¿Cuándo se usa?**: Se aplica cuando la solución es **Dual-Factible** (coeficientes objetivo $c_j \ge 0$), pero **Primal-Infactible** (hay valores $b_i < 0$ en el lado derecho RHS).
-  2. **Variable que Sale (Fila Pivote):** Elegimos la fila con el valor $b_i$ más negativo en el lado derecho:
-     $$r = \arg\min \{ b_i \mid b_i < 0 \}$$
-  3. **Variable que Entra (Columna Pivote):** Entre las columnas que tengan coeficientes negativos en la fila pivote ($a_{rj} < 0$), elegimos la que tenga el menor cociente en valor absoluto:
-     $$k = \arg\min_{a_{rj} < 0} \left| \frac{c_j}{a_{rj}} \right|$$
+* **Qué mostrar en pantalla:** Diapositiva con las fórmulas de selección de fila y columna pivote.
+
+* **Lo que debes decir (Guión exacto y natural):**
+
+  > **[1. Concepto y condición inicial]**  
+  > "Para entender el Simplex Dual, primero debemos recordar la diferencia con el Simplex Primal tradicional.  
+  > En el Simplex Primal empezamos con una solución *factible* (cumple las restricciones) e iteramos buscando la *optimalidad*.  
+  > En cambio, en el **Simplex Dual** ocurre exactamente lo contrario: **empezamos con una solución óptima o Dual-Factible** (es decir, la fila $Z$ ya cumple con tener coeficientes $c_j \ge 0$), pero es **Primal-Infactible** (significa que tenemos valores negativos $b_i < 0$ en la columna de recursos RHS).  
+  > El objetivo del Simplex Dual es eliminar gradualmente esas infactividades negativas hasta que todos los $b_i$ sean mayores o iguales a cero."
+
+  > **[2. Criterio de la Variable que SALE - Fila Pivote]**  
+  > "A diferencia del Simplex Primal donde primero se elige la columna, **en el Simplex Dual lo primero que elegimos es la Fila Pivote (la variable que sale de la base)**.  
+  > La regla es muy sencilla: buscamos la fila con el **valor más negativo** en el lado derecho ($RHS$).  
+  > Matemáticamente se expresa como:
+  > $$r = \arg\min_i \{ b_i \mid b_i < 0 \}$$  
+  > La fila elegida representa la restricción que tiene la peor infactibilidad, y su variable básica actual será la que **SALE** de la base."
+
+  > **[3. Criterio de la Variable que ENTRA - Columna Pivote]**  
+  > "Una vez seleccionada la fila que sale, necesitamos determinar qué variable **ENTRA** a la base (la Columna Pivote).  
+  > Para esto seguimos dos pasos:  
+  > 1. Miramos en la fila pivote únicamente aquellos coeficientes que sean **estrictamente negativos** ($a_{rj} < 0$).  
+  > 2. Calculamos el cociente o razón en valor absoluto entre el coeficiente de la función objetivo ($c_j$) y el coeficiente negativo de la fila pivote ($a_{rj}$):  
+  > $$\text{Cociente} = \left| \frac{c_j}{a_{rj}} \right|$$  
+  > La variable que **ENTRA** a la base será aquella con el **cociente mínimo**:  
+  > $$k = \arg\min_{a_{rj} < 0} \left| \frac{c_j}{a_{rj}} \right|$$  
+  > *Nota:* Si ningún coeficiente en la fila pivote fuera negativo, significaría que el problema es totalmente infactible.  
+  > Elegir el cociente mínimo es fundamental porque garantiza matemáticamente que, tras realizar el pivoteo por Gauss-Jordan, los coeficientes de la función objetivo se mantengan positivos ($c_j \ge 0$), conservando la dual-factibilidad en cada paso."
+
+---
 
 ### 1.3 Lectura del Archivo `.txt` (3:00 - 4:15)
 * **Qué mostrar en pantalla:** Abrir en el editor el código de la función `leer_problema_desde_txt()` y el archivo `problema.txt`.
-* **Lo que debes decir:**
+* **Lo que debes decir (Guión exacto):**
   > "Nuestra función `leer_problema_desde_txt()` en `simplex_dual.py` es muy flexible:
   > - Ignora automáticamente líneas de comentarios que inicien con `#`.
   > - Soporta 3 formatos de entrada: clave-valor (`tipo: min`, `c: 3, 2`), notación algebraica (`min z = 3x1 + 2x2`) o formato JSON.
